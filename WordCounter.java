@@ -1,25 +1,34 @@
+import java.util.*;
 import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
 public class WordCounter {
-    private static final String STOP_WORDS = "the, of, to, and, a, in, is, you, that, it";
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(System.in);
+    private static String Stopwords = "the, of, to, and, a, in,is, you, that, it"; 
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         System.out.print("Enter a text or provide a file: ");
-        String input = scanner.nextLine();
-
+        String input = sc.nextLine();
+        StringBuilder sb = new StringBuilder();
         if (input.startsWith("file:")) {
             File file = new File(input.substring(5));
             if (!file.exists()) {
-                System.out.println("File does not exist.");
+                System.out.println("File does not exist");
                 return;
             }
-            scanner = new Scanner(file);
+            try (Scanner fileScanner = new Scanner(file)) {
+                while (fileScanner.hasNextLine()) {
+                    sb.append(fileScanner.nextLine());
+                }
+            } catch (Exception e) {
+                System.out.println("Error reading file: " + e.getMessage());
+                return;
+            }
+        } else {
+            sb.append(input);
         }
-        String[] words = input.split("\\W+");
+        String[] words = sb.toString().split("\\W+");
         int wordCount = 0;
         for (String word : words) {
-            if (!STOP_WORDS.contains(word)) {
+            word = word.toLowerCase();
+            if (!Stopwords.contains(word)) {
                 wordCount++;
             }
         }
