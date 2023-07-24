@@ -1,34 +1,35 @@
-import java.util.Random;
+import java.util.*;
 public class GuessingGame {
-    private static final int MIN_NUMBER = 1;
-    private static final int MAX_NUMBER = 100;
-    private static final int MAX_ATTEMPTS = 10;
+    static int Min_numbers = 1;
+    static int Max_numbers = 100;
+    static int Max_attempts = 10;
     public static void main(String[] args) {
-        int number = new Random().nextInt(MAX_NUMBER - MIN_NUMBER + 1) + MIN_NUMBER;
-        int attempts = 0;
-        int guess;
-        do {
-            guess = getGuess();
-            if (guess == number) {
-                System.out.println("Congratulations! You guessed the number correctly.");
-                break;
-            } else if (guess < number) {
-                System.out.println("Your guess is too low.");
-            } else {
-                System.out.println("Your guess is too high.");
-            }
-            attempts++;
-        } while (attempts < MAX_ATTEMPTS);
-
-        if (attempts == MAX_ATTEMPTS) {
-            System.out.println("You have run out of attempts. The number was " + number);
-        } else {
-            System.out.println("You guessed the number in " + attempts + " attempts.");
+        Scanner scanner = new Scanner(System.in);
+        int totalScore = 0;
+        String playAgain = "Y";
+        while (playAgain.equalsIgnoreCase("Y")) {
+            int number = new Random().nextInt(Max_numbers - Min_numbers + 1) + Min_numbers;
+            int attempts = 0;
+            int guess;
+            do {
+                System.out.print("Enter your guess: ");
+                guess = scanner.nextInt();
+                if (guess == number) {
+                    System.out.println("Congratulations!! You guessed the number correctly.");
+                    break;
+                } else if (guess < number) {
+                    System.out.println("Your guess is too low");
+                } else {
+                    System.out.println("Your guess is too high");
+                }
+                attempts++;
+            } while (attempts < Max_attempts);
+            int score = Max_attempts - attempts;
+            totalScore += score;
+            System.out.println("Your total score is: " + totalScore);
+            System.out.print("Do you want to play again? (Y/N): ");
+            playAgain = scanner.next();
         }
-    }
-    private static int getGuess() {
-        System.out.print("Enter your guess: ");
-        int guess = Integer.parseInt(System.console().readLine());
-        return guess;
+        scanner.close();
     }
 }
